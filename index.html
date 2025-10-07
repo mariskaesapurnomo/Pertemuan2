@@ -101,7 +101,7 @@
         <p>Suhu Fahrenheit = <span id="suhuF">-</span> °F</p>
         <p>Kelembapan = <span id="kelembapan">-</span> %</p>
     </div>
-    
+
     <div class="section">
         <h3>Lokasi</h3>
         <p>Negara = <span id="negara">-</span></p>
@@ -112,7 +112,38 @@
     </div>
 
 <script>
+     $("#btnGet").click(function() {
+        const lokasi = $("#inputLokasi").val();
+        if (!lokasi) {
+            alert("Masukkan nama kota terlebih dahulu!");
+            return;
+        }
 
+        const urlapi = `https://api.weatherapi.com/v1/current.json?key=7da94d59077b4e95abe65557250710&q=${lokasi}&aqi=no`;
+
+        $.ajax({
+            url: urlapi,
+            method: "GET",
+            success: function(data) {
+                console.log(data);
+                // Data cuaca
+                $("#suhuC").text(data.current.temp_c);
+                $("#suhuF").text(data.current.temp_f);
+                $("#kelembapan").text(data.current.humidity);
+
+                // Data lokasi
+                $("#negara").text(data.location.country);
+                $("#provinsi").text(data.location.region);
+                $("#kecamatan").text(data.location.name);
+                $("#longitude").text(data.location.lon);
+                $("#latitude").text(data.location.lat);
+            },
+            error: function(err) {
+                alert("Data tidak ditemukan! Coba masukkan nama kota yang valid.");
+                console.log(err);
+            }
+        });
+    });
 </script>
 
 </body>
